@@ -29,10 +29,10 @@ client.on('message', message => {
 
     switch (message.author.id) {
         case user.doomed.id:
-            //message.react(emoji.mindset.doomisx.id);
+            message.react(emoji.mindset.doomisx.id);
             break;
         case user.audonte.id:
-            //message.react(emoji.mindset.CoolStoryMilan.id)
+            message.react(emoji.mindset.CoolStoryMilan.id)
     }
 
     if (message.channel.id == channel.recruit.id && message.author.username == user.recruit.username && message.content.includes(dict.recruit.final.men)) {
