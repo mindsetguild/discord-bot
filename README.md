@@ -1,1 +1,1 @@
-# discord-bot
+Mindset Discord Bot
