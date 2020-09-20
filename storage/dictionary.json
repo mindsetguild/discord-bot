@@ -1,0 +1,8 @@
+{
+    "system": {
+        "ready": "Discord bot connected to server!"
+    },
+    "error": {
+        "react": "One of the emojis failed to react!"
+    }
+}
