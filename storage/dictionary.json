@@ -3,6 +3,17 @@
         "ready": "Discord bot connected to server!"
     },
     "error": {
-        "react": "One of the emojis failed to react!"
+        "reaction": "One of the emojis failed to react!"
+    },
+    "recruit_manager": {
+        "final": {
+            "men": "Máte úroveň testosteronu přes 700 ng/dL? (páni)",
+            "woman": "Přinášíte ženskou něhu a porozumění? (dámy)"
+        }
+    },
+    "delete": {
+        "arguments": "Your command is missing arguments!",
+        "nan": "Your value of how many messages should be deleted is not a number!",
+        "success": "Messages deleted!"
     }
 }
