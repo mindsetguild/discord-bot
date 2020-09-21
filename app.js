@@ -16,7 +16,27 @@ client.once('ready', () => {
     console.log(dict.system.ready);
 });
 
+client.on('ready', () => {
+    client.user.setPresence({
+        status: 'dnd',
+        activity: {
+            name: 'with Rothius',
+            type: 'PLAYING',
+            url: 'https://www.mindsetgg.eu/'
+        }
+    })
+    /*
+    client.user.setActivity({
+        name: 'with Rothius',
+        type: 'PLAYING',
+        url: 'https://www.mindsetgg.eu/'
+    });
+    */
+    console.log(`${client.user.tag} is up and running!`);
+});
+
 client.on('message', message => {
+
     if (message.channel.id == channel.bot.id) {
         console.log(message);
         //const name = message.guild.members.find(member => member.name == message.author.username);
