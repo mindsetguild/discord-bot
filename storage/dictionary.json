@@ -25,7 +25,8 @@
         "success": "Neotravuj 😁"
     },
     "role": {
-        "arguments": "Your command is missing arguments!"
+        "arguments": "your command is missing arguments or you do not have permission!",
+        "missing": "role does not exist on this server!"
     },
     "bot": {
         "response": {

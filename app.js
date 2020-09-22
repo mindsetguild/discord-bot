@@ -42,7 +42,16 @@ client.on('message', message => {
 
     switch (message.author.id) {
         case user.doomed.id:
-            //message.react(emoji.mindset.doomisx.id);
+            message.react(getEmojiByName(message.guild, 'doomisx').id)
+                .then(() => message.react('🇩'))
+                .then(() => message.react('🇴'))
+                .then(() => message.react(getEmojiByName(message.guild, 'OMEGALUL').id))
+                .then(() => message.react('🇲'))
+                .then(() => message.react('🇮'))
+                .then(() => message.react('🇸'))
+                .then(() => message.react('🇽'))
+                .then(() => message.react(getEmojiByName(message.guild, 'doomisW').id))
+                .catch(() => console.error(dict.error.reaction));
             break;
         case user.audonte.id:
         //message.react(emoji.mindset.CoolStoryMilan.id)
@@ -65,13 +74,13 @@ client.on('message', message => {
                     executeHelp(message.author, message.channel);
                     break;
                 case command.delete.keyword:
-                    executeDelete(message.channel, message.member, commandObject.parameters);
+                    executeDelete(message.author, message.channel, message.member, commandObject.parameters);
                     break;
                 case command.private.keyword:
                     executePrivate(message.author);
                     break;
                 case command.role.keyword:
-                    executeRole(message.channel, message.guild, commandObject.parameters);
+                    executeRole(message.author, message.channel, message.guild, commandObject.parameters);
             }
         }
 
@@ -195,16 +204,17 @@ function executeHelp(author, channel) {
 
 /**
  * Delete messeges from current channel
+ * @param {Discord.User} author
  * @param {Discord.Channel} channel 
  * @param {Discord.User} member
  * @param {Array} parameters 
  */
-function executeDelete(channel, member, parameters) {
+function executeDelete(author, channel, member, parameters) {
     if (getRoleByName(member, 'Management')) {
         parameters > 0 ? !isNaN(parameters[0]) ? deleteMessages(channel, parseInt(parameters[0]) + 1) : channel.send(dict.delete.nan) : channel.send(dict.delete.arguments);
     }
     else {
-        channel.send(dict.delete.permission);
+        channel.send(`${author} ${dict.delete.permission}`);
     }
 }
 
@@ -216,15 +226,21 @@ function executePrivate(author) {
     author.send(dict.private.success).catch(console.error);
 }
 
-function executeRole(channel, guild, parameters) {
-    if (parameters.length > 0) {
+/**
+ * Show members for specified role
+ * @param {Discord.User} author 
+ * @param {Discord.Channel} channel 
+ * @param {Discord.Guild} guild 
+ * @param {Array} parameters 
+ */
+function executeRole(author, channel, guild, parameters) {
+    if (guild && parameters.length > 0) {
         let members = guild.members.cache.filter(member => member.roles.cache.find(role => role.name == parameters[0]))
             .map(member => member.user.username);
 
-        console.log(members);
-        channel.send(members).catch(console.error);
+        members.length > 0 ? channel.send(`>>> **Total: ${members.length}**\n${members.join('\n')}`): channel.send(`${author} "${parameters[0]}" ${dict.role.missing}`);
     }
     else {
-        channel.send(dict.role.arguments);
+        channel.send(`${author} ${dict.role.arguments}`);
     }
 }
