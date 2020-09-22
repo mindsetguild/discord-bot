@@ -11,5 +11,11 @@
     },
     "role": {
         "keyword": "role"
+    },
+    "cat": {
+        "keyword": "cat"
+    },
+    "dog": {
+        "keyword": "dogo"
     }
 }

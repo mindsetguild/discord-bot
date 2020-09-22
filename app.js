@@ -2,6 +2,7 @@
 const Discord = require('discord.js');
 const config = require('./config.json');
 const fs = require('fs');
+const fetch = require('node-fetch');
 const dict = require('./storage/dictionary.json');
 const emoji = require('./storage/emoji.json');
 const user = require('./storage/user.json');
@@ -36,12 +37,14 @@ client.on('message', message => {
         //const emoji = message.guild.emojis.find(emoji => emoji.name == emoji.mindset.PepeLaugh.name);
     }
 
+    // pepelaugh react
     if (message.content.includes(emoji.mindset.PepeLaugh.name) && !message.author.bot) {
         message.react(emoji.mindset.PepeLaugh.id);
     }
 
     switch (message.author.id) {
         case user.doomed.id:
+            /*
             message.react(getEmojiByName(message.guild, 'doomisx').id)
                 .then(() => message.react('🇩'))
                 .then(() => message.react('🇴'))
@@ -52,6 +55,7 @@ client.on('message', message => {
                 .then(() => message.react('🇽'))
                 .then(() => message.react(getEmojiByName(message.guild, 'doomisW').id))
                 .catch(() => console.error(dict.error.reaction));
+                */
             break;
         case user.audonte.id:
         //message.react(emoji.mindset.CoolStoryMilan.id)
@@ -81,6 +85,21 @@ client.on('message', message => {
                     break;
                 case command.role.keyword:
                     executeRole(message.author, message.channel, message.guild, commandObject.parameters);
+                    break;
+                case command.cat.keyword:
+                    getCatImage(message.channel);
+                    if (message.channel.guild) {
+                        const emojis = ['mericCat', 'CatWhat', 'catJAM', 'ThumbUpCat'];
+                        message.react(getRandomEmoji(message.guild, emojis).id)
+                            .catch(() => console.error(dict.error.reaction));
+                    }
+                    else {
+                        message.react('🐈');
+                    }
+                    //executeCat(message.channel, message.guild);
+                    break;
+                case command.dog.keyword:
+                    executeDog(message.channel, message.guild);
             }
         }
 
@@ -194,6 +213,17 @@ function getRoleByName(object, name) {
 }
 
 /**
+ * Return random emoji from array
+ * @param {Discord.Guild} guild 
+ * @param {Array} emojis 
+ */
+function getRandomEmoji(guild, emojis) {
+    const index = Math.floor(Math.random() * emojis.length);
+    return getEmojiByName(guild, emojis[index]);
+}
+
+
+/**
  * Send help to current channel
  * @param {Discord.User} author 
  * @param {Discord.Channel} channel 
@@ -238,9 +268,43 @@ function executeRole(author, channel, guild, parameters) {
         let members = guild.members.cache.filter(member => member.roles.cache.find(role => role.name == parameters[0]))
             .map(member => member.user.username);
 
-        members.length > 0 ? channel.send(`>>> **Total: ${members.length}**\n${members.join('\n')}`): channel.send(`${author} "${parameters[0]}" ${dict.role.missing}`);
+        members.length > 0 ? channel.send(`>>> **Total: ${members.length}**\n${members.join('\n')}`) : channel.send(`${author} "${parameters[0]}" ${dict.role.missing}`);
     }
     else {
         channel.send(`${author} ${dict.role.arguments}`);
+    }
+}
+
+/**
+ * Send random cat emoji
+ * @param {Discord.Channel} channel 
+ * @param {Discord.Guild} guild 
+ */
+function executeCat(channel, guild) {
+    const emojis = ['mericCat', 'CatWhat', 'catJAM', 'ThumbUpCat']
+    channel.send(`${getRandomEmoji(guild, emojis)}`);
+}
+
+/**
+ * Send random dog emoji
+ * @param {Discord.Channel} channel 
+ * @param {Discord.Guild} guild 
+ */
+function executeDog(channel, guild) {
+    const emojis = ['WoweeW'];
+    channel.send(`${getRandomEmoji(guild, emojis)}`);
+}
+
+/**
+ * Send random cat picture to channel
+ * @param {Discord.Channel} channel 
+ */
+function getCatImage(channel) {
+    try {
+        fetch('https://aws.random.cat/meow')
+            .then(response => response.json())
+            .then(json => channel.send(json.file));
+    } catch (err) {
+        console.log(err);
     }
 }
