@@ -1,6 +1,7 @@
 // require the discord.js module and other config files
 const Discord = require('discord.js');
 const config = require('./config.json');
+const fs = require('fs');
 const dict = require('./storage/dictionary.json');
 const emoji = require('./storage/emoji.json');
 const user = require('./storage/user.json');
@@ -18,41 +19,33 @@ client.once('ready', () => {
 
 client.on('ready', () => {
     client.user.setPresence({
-        status: 'dnd',
+        status: config.status,
         activity: {
-            name: 'with Rothius',
-            type: 'PLAYING',
-            url: 'https://www.mindsetgg.eu/'
+            name: config.activity.name,
+            type: config.activity.type,
+            url: config.activity.url
         }
     })
-    /*
-    client.user.setActivity({
-        name: 'with Rothius',
-        type: 'PLAYING',
-        url: 'https://www.mindsetgg.eu/'
-    });
-    */
     console.log(`${client.user.tag} is up and running!`);
 });
 
 client.on('message', message => {
 
-    if (message.channel.id == channel.bot.id) {
-        console.log(message);
+    if (message.channel.id == channel.bot.id && !message.author.bot) {
         //const name = message.guild.members.find(member => member.name == message.author.username);
         //const emoji = message.guild.emojis.find(emoji => emoji.name == emoji.mindset.PepeLaugh.name);
     }
 
-    if (message.content.includes(emoji.mindset.PepeLaugh.name) && message.author.id != config.bot) {
+    if (message.content.includes(emoji.mindset.PepeLaugh.name) && !message.author.bot) {
         message.react(emoji.mindset.PepeLaugh.id);
     }
 
     switch (message.author.id) {
         case user.doomed.id:
-            message.react(emoji.mindset.doomisx.id);
+            //message.react(emoji.mindset.doomisx.id);
             break;
         case user.audonte.id:
-            message.react(emoji.mindset.CoolStoryMilan.id)
+        //message.react(emoji.mindset.CoolStoryMilan.id)
     }
 
     if (message.channel.id == channel.recruit.id && message.author.username == user.recruit.username && message.content.includes(dict.recruit.final.men)) {
@@ -61,10 +54,38 @@ client.on('message', message => {
             .catch(() => console.error(dict.error.reaction));
     }
 
-    if (message.content.startsWith(config.prefix + command.delete) && message.author.id == user.rothius.id) {
-        const args = message.content.split(' ').slice(1);
-        console.log(args.length);
-        args.length > 0 ? !isNaN(args[0]) ? deleteMessages(message.channel, parseInt(args[0]) + 1) : message.channel.send(dict.delete.nan) : message.channel.send(dict.delete.arguments);
+    // prefix command was sent
+    if (message.content.startsWith(config.prefix)) {
+        let commandObject = getCommandObject(message.content);
+        if (validateCommand(commandObject.command)) {
+            console.log(`command: ${commandObject.command}\nparams: ${commandObject.parameters}`);
+
+            switch (commandObject.command) {
+                case command.help.keyword:
+                    executeHelp(message.author, message.channel);
+                    break;
+                case command.delete.keyword:
+                    executeDelete(message.channel, message.member, commandObject.parameters);
+                    break;
+                case command.private.keyword:
+                    executePrivate(message.author);
+                    break;
+                case command.role.keyword:
+                    executeRole(message.channel, message.guild, commandObject.parameters);
+            }
+        }
+
+        else {
+            let response = `${mention(message.author.id)} ${dict.error.command}`;
+            message.channel.send(response)
+        }
+    }
+
+    // bot is mentioned
+    if (message.content.includes(client.user.id)) {
+        message.channel.send(`${mention(message.author.id)} ${getEmojiByName(message.guild, 'BOGGED')} ${dict.bot.response.mention}`)
+            .then(() => message.react(getEmojiByName(message.guild, 'PepegaCall').id))
+            .catch(() => console.error(dict.error.reaction));
     }
 });
 
@@ -98,6 +119,112 @@ async function deleteMessages(message) {
  */
 function deleteMessages(channel, amount) {
     channel.bulkDelete(amount)
-        .then(messages => console.log(`Bulk deleted ${messages.size - 1} messages`))
+        .then(messages => console.log(`Deleted ${messages.size - 1} messages in channel #${channel.name}`))
         .catch(console.error)
+}
+
+/**
+ * Validates if keyword is valid command
+ * @param {String} keyword f
+ */
+function validateCommand(keyword) {
+    for (let key in command) {
+        if (command[key].keyword == keyword) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Returns discord mention format for specific type and id
+ * @param {Number} id 
+ * @param {String} type 
+ */
+function mention(id, type = 'author') {
+    switch (type) {
+        case 'author':
+            return `<@${id}>`
+        case 'channel':
+            return `<#${id}>`
+        case 'role':
+            return `<@&${id}>`
+        default:
+            return false;
+    }
+}
+
+/**
+ * Returns first word as command and remaining as parameters
+ * @param {String} content 
+ */
+function getCommandObject(content) {
+    const args = content.split(' ');
+    return args.length > 0 ? {
+        command: args[0].slice(1),
+        parameters: args.slice(1)
+    } : false;
+}
+
+/**
+ * Get emoji object by name from server or client cache
+ * @param {Discord.Client | Discord.Guild} object
+ * @param {String} name 
+ */
+function getEmojiByName(object, name) {
+    return object.emojis.cache.find(emoji => emoji.name == name);
+}
+
+/**
+ * Get role object by name from server or member cache
+ * @param {Discord.User | Discord.Guild} object 
+ * @param {String} name 
+ */
+function getRoleByName(object, name) {
+    return object.roles.cache.find(role => role.name == name);
+}
+
+/**
+ * Send help to current channel
+ * @param {Discord.User} author 
+ * @param {Discord.Channel} channel 
+ */
+function executeHelp(author, channel) {
+    fs.readFile(command.help.path, (error, data) => error ? console.error(error) : channel.send(`${mention(author.id)} ${dict.help.success}\n${data}`));
+}
+
+/**
+ * Delete messeges from current channel
+ * @param {Discord.Channel} channel 
+ * @param {Discord.User} member
+ * @param {Array} parameters 
+ */
+function executeDelete(channel, member, parameters) {
+    if (getRoleByName(member, 'Management')) {
+        parameters > 0 ? !isNaN(parameters[0]) ? deleteMessages(channel, parseInt(parameters[0]) + 1) : channel.send(dict.delete.nan) : channel.send(dict.delete.arguments);
+    }
+    else {
+        channel.send(dict.delete.permission);
+    }
+}
+
+/**
+ * Send private message to user
+ * @param {Discord.User} author 
+ */
+function executePrivate(author) {
+    author.send(dict.private.success).catch(console.error);
+}
+
+function executeRole(channel, guild, parameters) {
+    if (parameters.length > 0) {
+        let members = guild.members.cache.filter(member => member.roles.cache.find(role => role.name == parameters[0]))
+            .map(member => member.user.username);
+
+        console.log(members);
+        channel.send(members).catch(console.error);
+    }
+    else {
+        channel.send(dict.role.arguments);
+    }
 }

@@ -3,17 +3,33 @@
         "ready": "Discord bot connected to server!"
     },
     "error": {
-        "reaction": "One of the emojis failed to react!"
+        "reaction": "One of the emojis failed to react!",
+        "command": "Command not found! Check !help for more information."
     },
-    "recruit_manager": {
+    "recruit": {
         "final": {
             "men": "Máte úroveň testosteronu přes 700 ng/dL? (páni)",
             "woman": "Přinášíte ženskou něhu a porozumění? (dámy)"
         }
     },
+    "help": {
+        "success": "here is your help!"
+    },
     "delete": {
         "arguments": "Your command is missing arguments!",
         "nan": "Your value of how many messages should be deleted is not a number!",
+        "permission": "You do not have permission for this action!",
         "success": "Messages deleted!"
+    },
+    "private": {
+        "success": "Neotravuj 😁"
+    },
+    "role": {
+        "arguments": "Your command is missing arguments!"
+    },
+    "bot": {
+        "response": {
+            "mention": "nějaká práce?"
+        }
     }
 }

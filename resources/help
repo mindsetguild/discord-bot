@@ -1,0 +1,6 @@
+>>> __**HELP**__
+
+**!help** - show this
+**!delete [number]** - delete specified number of messages in current channel ('Management' role is required)
+**!request [command]** - WIP, nestíham nic <:PepeLaugh:752160673680719943>
+**!role [name]** - show all users for specified role name

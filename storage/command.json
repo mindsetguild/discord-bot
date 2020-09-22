@@ -1,3 +1,15 @@
 {
-    "delete": "delete"
+    "help": {
+        "keyword": "help",
+        "path": "./resources/help"
+    },
+    "delete": {
+        "keyword": "delete"
+    },
+    "private": {
+        "keyword": "request"
+    },
+    "role": {
+        "keyword": "role"
+    }
 }
