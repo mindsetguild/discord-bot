@@ -1,10 +1,12 @@
 {
     "system": {
-        "ready": "Discord bot connected to server!"
+        "ready": "Discord bot connected to server!",
+        "running": "is up and running!"
     },
     "error": {
         "reaction": "One of the emojis failed to react!",
-        "command": "Command not found! Check !help for more information."
+        "missing": "Command not found! Check !help for more information!",
+        "command": "there was an error trying to execute your command! 🤷‍♀️"
     },
     "recruit": {
         "final": {
@@ -21,12 +23,14 @@
         "permission": "You do not have permission for this action!",
         "success": "Messages deleted!"
     },
-    "private": {
-        "success": "Neotravuj 😁"
-    },
     "role": {
         "arguments": "your command is missing arguments or you do not have permission!",
         "missing": "role does not exist on this server!"
+    },
+    "idea": {
+        "success": "your idea has been added to sheet!",
+        "error": "there was an error trying to add your idea! 🤷‍♀️",
+        "channel": "for adding more ideas use channel"
     },
     "bot": {
         "response": {

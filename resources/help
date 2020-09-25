@@ -1,7 +1,7 @@
 >>> __**HELP**__
 
-**!help** - show this
+**!help** - show help
 **!delete [number]** - delete specified number of messages in current channel ('Management' role is required)
-**!request [command]** - WIP, nestíhám nic <:PepeLaugh:752160673680719943>
 **!role [name]** - show all users for specified role name
-**!cat** - sends random cat image
+**!cat** - sends random cat image 🐈
+**!idea** - add new idea to sheet

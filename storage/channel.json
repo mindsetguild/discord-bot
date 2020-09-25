@@ -1,8 +1,14 @@
 {
     "bot": {
+        "name": "bot-development",
         "id": "752807018846355487"
     },
     "recruit": {
+        "name": "recruit-manager",
         "id": "755466747628355624"
+    },
+    "idea": {
+        "name": "idea-manager",
+        "id": "753941184174489690"
     }
 }

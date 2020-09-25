@@ -1,7 +1,10 @@
 {
     "help": {
         "keyword": "help",
-        "path": "./resources/help"
+        "path": {
+            "cs": "./resources/help",
+            "en": "./resources/help"
+        }
     },
     "delete": {
         "keyword": "delete"
@@ -13,9 +16,12 @@
         "keyword": "role"
     },
     "cat": {
-        "keyword": "cat"
+        "keyword": "cat",
+        "emojis": ["mericCat", "CatWhat", "catJAM", "ThumbUpCat"],
+        "url": "https://aws.random.cat/meow"
     },
     "dog": {
-        "keyword": "dogo"
+        "keyword": "dogo",
+        "emojis": ["WoweeW"]
     }
 }
