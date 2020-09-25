@@ -26,7 +26,7 @@ async function run(author, args) {
     const doc = new GoogleSpreadsheet(google.sheets.development);
 
     // load google credentials from config file
-    await doc.useServiceAccountAuth(require('../credentials/google.json'));
+    await doc.useServiceAccountAuth(require(google.credentials));
 
     // loads document properties and worksheets
     await doc.loadInfo();

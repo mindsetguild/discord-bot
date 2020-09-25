@@ -63,7 +63,7 @@ async function run() {
     // spreadsheet url id
     const doc = new GoogleSpreadsheet(google.sheets.id);
     // load google credentials from config file
-    await doc.useServiceAccountAuth(require('../credentials/google.json'));
+    await doc.useServiceAccountAuth(require(google.credentials));
     // loads document properties and worksheets
     await doc.loadInfo();
     // get idea sheet
