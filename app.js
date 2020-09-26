@@ -47,7 +47,7 @@ client.on('ready', () => {
 // message is sent
 client.on('message', message => {
     // development channel log
-    if (message.channel == functions.getChannelByName(message.guild, client.storage.get('channel').bot.name) && !message.author.bot) {
+    if (message.guild && message.channel == functions.getChannelByName(message.guild, client.storage.get('channel').bot.name) && !message.author.bot) {
         console.log(message);
     }
 
