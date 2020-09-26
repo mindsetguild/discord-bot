@@ -6,6 +6,5 @@ module.exports = {
 	description: 'show available bot commands',
 	execute(message, args, storage) {
         fs.readFile(storage.command.help.path.en, (error, data) => error ? console.error(error) : message.reply(`${message.author}, ${storage.dict.help.success}\n${data}`));
-        console.log(functions);
     }
 };

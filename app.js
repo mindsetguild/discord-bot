@@ -47,8 +47,8 @@ client.on('ready', () => {
 // message is sent
 client.on('message', message => {
     // development channel log
-    if (message.channel.id == client.storage.get('channel').bot.id && !message.author.bot) {
-        //console.log(message);
+    if (message.channel == functions.getChannelByName(message.guild, client.storage.get('channel').bot.name) && !message.author.bot) {
+        console.log(message);
     }
 
     // dm log
@@ -57,7 +57,7 @@ client.on('message', message => {
     }
 
     // pepelaugh react
-    if (message.channel.type != 'dm' && message.content.includes(functions.getEmojiByName(message.guild, 'PepeLaugh')) && !message.author.bot) {
+    if (message.guild && message.content.includes(functions.getEmojiByName(message.guild, 'PepeLaugh')) && !message.author.bot) {
         message.react(functions.getEmojiByName(message.guild, 'PepeLaugh').id);
     }
 
