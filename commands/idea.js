@@ -23,16 +23,16 @@ module.exports = {
  */
 async function run(author, args) {
     // spreadsheet url id
-    const doc = new GoogleSpreadsheet(google.sheets.development);
+    const doc = new GoogleSpreadsheet(google.sheets.id);
 
     // load google credentials from config file
-    await doc.useServiceAccountAuth(require(google.credentials));
+    await doc.useServiceAccountAuth(require('../credentials/google.json'));
 
     // loads document properties and worksheets
     await doc.loadInfo();
 
     // get idea sheet
-    const sheet = doc.sheetsByIndex[4]; // or use doc.sheetsById[id]
+    const sheet = doc.sheetsByTitle['Ideas']; // or use doc.sheetsById[id]
 
     // add new idea as new row
     await sheet.addRow({ Name: author.username, Idea: args.join(' '), Verdict: 'TBD' });

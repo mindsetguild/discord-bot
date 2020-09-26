@@ -8,14 +8,14 @@
         "missing": "Command not found! Check !help for more information!",
         "command": "there was an error trying to execute your command! 🤷‍♀️"
     },
-    "recruit": {
-        "final": {
-            "men": "Máte úroveň testosteronu přes 700 ng/dL? (páni)",
-            "woman": "Přinášíte ženskou něhu a porozumění? (dámy)"
-        }
-    },
     "help": {
-        "success": "here is your help!"
+        "success": "here is your help!",
+        "commands": {
+            "delete": "delete specified number of messages in current channel ('Management' role is required)",
+            "role": "show all users for specified role name",
+            "cat": "sends random cat image 🐈",
+            "idea": "add new idea to sheet"
+        }
     },
     "delete": {
         "arguments": "Your command is missing arguments!",

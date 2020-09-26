@@ -63,11 +63,11 @@ async function run() {
     // spreadsheet url id
     const doc = new GoogleSpreadsheet(google.sheets.id);
     // load google credentials from config file
-    await doc.useServiceAccountAuth(require(google.credentials));
+    await doc.useServiceAccountAuth(require('../credentials/google.json'));
     // loads document properties and worksheets
     await doc.loadInfo();
     // get idea sheet
-    const sheet = doc.sheetsByTitle['Recruit']; //doc.sheetsByIndex.filter(_rawProperties => _rawProperties.title == 'Recruit'); or use doc.sheetsById[id]
+    const sheet = doc.sheetsByTitle['Recruit'];
     // get current rows
     const rows = await sheet.getRows();
 
