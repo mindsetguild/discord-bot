@@ -15,24 +15,24 @@ module.exports = {
             run().then(response => {
 
                 if (response.rowCount <= rowCount) return;
-
+                const recruitChannel = client.guilds.cache.find(guild => guild.id == server).channels.cache.find(channel => channel.name == client.storage.get('channel').recruit.name);
                 try {
                     rowCount = response.rowCount;
-                    const channel = client.guilds.cache.find(guild => guild.id == server).channels.cache.find(channel => channel.name == client.storage.get('channel').recruit.name);
-                    sendRecruitMessage(channel, response.rowData);
+
+                    sendRecruitMessage(recruitChannel, response.rowData);
                 } catch (error) {
                     console.error(error);
-                    channel.send(`${dict.recruit.error}`);
+                    recruitChannel.send(`${dict.recruit.error}`);
                 }
             });
         }, 5000);
-    }
-}
+    },
+};
 
 /**
- * 
- * @param {Discord.Channel} channel 
- * @param {Object} rowData 
+ *
+ * @param {Discord.Channel} channel
+ * @param {Object} rowData
  */
 function sendRecruitMessage(channel, rowData) {
 
@@ -54,7 +54,7 @@ function sendRecruitMessage(channel, rowData) {
     channel.send(embedMessage)
         .then(() => channel.lastMessage.react('👍'))
         .then(() => channel.lastMessage.react('👎'))
-        .catch(error => { console.error(error); channel.send(`${dict.error.reaction}`) });
+        .catch(error => { console.error(error); channel.send(`${dict.error.reaction}`); });
 }
 
 /**
@@ -72,17 +72,16 @@ async function run() {
     // get current rows
     const rows = await sheet.getRows();
 
-    //let rowCount = 0;
-    //rows.forEach(row => row._rawData[0] && row._rawData[1] && row._rawData[3] ? rowCount++ : false);
+    // let rowCount = 0;
+    // rows.forEach(row => row._rawData[0] && row._rawData[1] && row._rawData[3] ? rowCount++ : false);
 
     // build response object
-    let rowData = {};
+    const rowData = {};
     const lastRow = rows.pop();
     lastRow._sheet.headerValues.forEach((header, index) => rowData[header] = lastRow._rawData[index]);
 
     return {
         rowCount: Object.keys(rows).length,
-        rowData: rowData
-    }
-
+        rowData: rowData,
+    };
 }

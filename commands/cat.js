@@ -13,19 +13,20 @@ module.exports = {
         else {
             message.react('🐈');
         }
-    }
+    },
 };
 
 /**
  * Send random cat picture to channel
- * @param {Discord.Channel} channel 
+ * @param {Discord.Channel} channel
  */
 function getCatImage(message, storage) {
     try {
         fetch(storage.command.cat.url)
             .then(response => response.json())
             .then(json => message.channel.send(json.file));
-    } catch (error) {
+    }
+    catch (error) {
         console.error(error);
         message.reply(`${storage.dict.cat.error}`);
     }

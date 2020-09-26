@@ -34,11 +34,11 @@ client.once('ready', () => {
 client.on('ready', () => {
     client.user.setPresence({
         status: status,
-        activity: activity
-    })
+        activity: activity,
+    }),
 
-    // bot is running
-    console.log(`${client.user.tag} ${client.storage.get('dictionary').system.running}`);
+        // bot is running
+        console.log(`${client.user.tag} ${client.storage.get('dictionary').system.running}`);
 
     // start checking for new applications
     recruit.execute(client);
@@ -63,8 +63,8 @@ client.on('message', message => {
 
     // bot is mentioned
     if (message.guild && message.content.includes(client.user.id)) {
-        message.reply(`${client.storage.dictionary.bot.response.mention} ${getEmojiByName(message.guild, 'BOGGED')}`)
-            .then(() => message.react(getEmojiByName(message.guild, 'PepegaCall').id))
+        message.reply(`${client.storage.dictionary.bot.response.mention} ${functions.getEmojiByName(message.guild, 'BOGGED')}`)
+            .then(() => message.react(functions.getEmojiByName(message.guild, 'PepegaCall').id))
             .catch(error => { console.error(error); message.reply(`${client.storage.get('dictionary').error.reaction}`); });
     }
 
@@ -83,12 +83,13 @@ client.on('message', message => {
             user: client.storage.get('user'),
             emoji: client.storage.get('emoji'),
             channel: client.storage.get('channel'),
-        }
+        };
 
         // try to execute command
         try {
             client.commands.get(commandName).execute(message, args, storage);
-        } catch (error) {
+        }
+        catch (error) {
             console.error(error);
             message.reply(`${client.storage.get('dictionary').error.command}`);
         }
