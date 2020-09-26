@@ -18,19 +18,26 @@
         }
     },
     "delete": {
-        "arguments": "Your command is missing arguments!",
-        "nan": "Your value of how many messages should be deleted is not a number!",
-        "permission": "You do not have permission for this action!",
-        "success": "Messages deleted!"
+        "arguments": "your command is missing arguments!",
+        "nan": "your value of how many messages should be deleted is not a number!",
+        "permission": "you do not have permission for this action!",
+        "success": "messages deleted!",
+        "error": "there was an error deleting messages!"
     },
     "role": {
         "arguments": "your command is missing arguments or you do not have permission!",
         "missing": "role does not exist on this server!"
     },
+    "cat": {
+        "error": "there was an error loading cat image! 🐈"
+    },
     "idea": {
         "success": "your idea has been added to sheet!",
         "error": "there was an error trying to add your idea! 🤷‍♀️",
         "channel": "for adding more ideas use channel"
+    },
+    "recruit": {
+        "error": "there was an error loading application!"
     },
     "bot": {
         "response": {

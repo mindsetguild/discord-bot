@@ -14,7 +14,7 @@ module.exports = {
 
         run(message.author, args)
             .then(() => message.reply(`${storage.dict.idea.success} ${functions.getEmojiByName(message.guild, 'weSmart')}`))
-            .catch(error => { console.error(error); message.reply(storage.dict.idea.error); });
+            .catch(error => { console.error(error); message.reply(`${storage.dict.idea.error}`); });
     }
 }
 

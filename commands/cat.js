@@ -5,10 +5,10 @@ module.exports = {
 	name: 'cat',
 	description: 'sends random cat image 🐈',
 	execute(message, args, storage) {
-        getCatImage(message, storage.command.cat.url);
+        getCatImage(message, storage);
         if (message.channel.guild) {
             message.react(functions.getRandomEmoji(message.guild, storage.command.cat.emojis).id)
-                .catch(() => console.error(storage.dict.error.reaction));
+                .catch(error => { console.error(error); message.reply(`${storage.dict.error.reaction}`); });
         }
         else {
             message.react('🐈');
@@ -20,12 +20,13 @@ module.exports = {
  * Send random cat picture to channel
  * @param {Discord.Channel} channel 
  */
-function getCatImage(message, url) {
+function getCatImage(message, storage) {
     try {
-        fetch(url)
+        fetch(storage.command.cat.url)
             .then(response => response.json())
             .then(json => message.channel.send(json.file));
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        message.reply(`${storage.dict.cat.error}`);
     }
 }

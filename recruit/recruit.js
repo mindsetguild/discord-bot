@@ -22,6 +22,7 @@ module.exports = {
                     sendRecruitMessage(channel, response.rowData);
                 } catch (error) {
                     console.error(error);
+                    channel.send(`${dict.recruit.error}`);
                 }
             });
         }, 5000);
@@ -53,7 +54,7 @@ function sendRecruitMessage(channel, rowData) {
     channel.send(embedMessage)
         .then(() => channel.lastMessage.react('👍'))
         .then(() => channel.lastMessage.react('👎'))
-        .catch(() => console.error(dict.error.reaction));
+        .catch(error => { console.error(error); channel.send(`${dict.error.reaction}`) });
 }
 
 /**

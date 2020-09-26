@@ -62,10 +62,10 @@ client.on('message', message => {
     }
 
     // bot is mentioned
-    if (message.content.includes(client.user.id) && message.channel.type != 'dm') {
-        message.channel.send(`${mention(message.author.id)} ${getEmojiByName(message.guild, 'BOGGED')} ${client.storage.dictionary.bot.response.mention}`)
+    if (message.guild && message.content.includes(client.user.id)) {
+        message.reply(`${client.storage.dictionary.bot.response.mention} ${getEmojiByName(message.guild, 'BOGGED')}`)
             .then(() => message.react(getEmojiByName(message.guild, 'PepegaCall').id))
-            .catch(() => console.error(client.storage.dictionary.error.reaction));
+            .catch(error => { console.error(error); message.reply(`${client.storage.get('dictionary').error.reaction}`); });
     }
 
     // prefix command was sent

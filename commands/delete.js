@@ -7,7 +7,7 @@ module.exports = {
         
         if (!functions.getRoleByName(message.member, 'Management')) { message.reply(`${storage.dict.delete.permission}`); return; }
 
-        args.length > 0 ? !isNaN(args[0]) ? deleteMessages(message.channel, parseInt(args[0]) + 1) : message.channel.send(storage.dict.delete.nan) : message.channel.send(dict.delete.arguments);
+        args.length > 0 ? !isNaN(args[0]) ? deleteMessages(message, parseInt(args[0]) + 1, storage) : message.reply(`${storage.dict.delete.nan}`) : message.reply(`${storage.dict.delete.arguments}`);
     }
 };
 
@@ -15,11 +15,12 @@ module.exports = {
  * Delete amount number of messages in specified channel
  * @param {Discord.Channel} channel 
  * @param {Number} amount 
+ * @param {Object} storage
  */
-function deleteMessages(channel, amount) {
-    channel.bulkDelete(amount)
-        .then(messages => console.log(`Deleted ${messages.size - 1} messages in channel #${channel.name}`))
-        .catch(console.error)
+function deleteMessages(message, amount, storage) {
+    message.channel.bulkDelete(amount)
+        .then(messages => console.log(`Deleted ${messages.size - 1} messages in channel #${message.channel.name}`))
+        .catch(error => { console.error(error); message.reply(`${storage.dict.delete.error}`); });
 }
 
 /**
