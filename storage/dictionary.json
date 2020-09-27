@@ -10,11 +10,14 @@
     },
     "help": {
         "success": "here is your help!",
-        "commands": {
-            "delete": "delete specified number of messages in current channel ('Management' role is required)",
-            "role": "show all users for specified role name",
-            "cat": "sends random cat image 🐈",
-            "idea": "add new idea to sheet"
+        "embed": {
+            "command": {
+                "help": "show help message",
+                "delete": "delete specified number of messages in current channel",
+                "role": "show all users for specified role name",
+                "cat": "send random cat image 🐈 in current channel",
+                "idea": "add new idea to google sheet"
+            }
         }
     },
     "delete": {
@@ -37,6 +40,11 @@
         "channel": "for adding more ideas use channel"
     },
     "recruit": {
+        "embed": {
+            "title": "Application", 
+            "description": "New application has been submitted!",
+            "footer": "Application submitted on"
+        },
         "error": "there was an error loading application!"
     },
     "bot": {

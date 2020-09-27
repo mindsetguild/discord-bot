@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const recruit = require('./config.json');
-const { server, google } = require('../config.json');
+const { server, google, url, color, logo } = require('../config.json');
 const dict = require('../storage/dictionary.json');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
@@ -15,12 +15,15 @@ module.exports = {
             run().then(response => {
 
                 if (response.rowCount <= rowCount) return;
+
                 const recruitChannel = client.guilds.cache.find(guild => guild.id == server).channels.cache.find(channel => channel.name == client.storage.get('channel').recruit.name);
+
                 try {
                     rowCount = response.rowCount;
 
                     sendRecruitMessage(recruitChannel, response.rowData);
-                } catch (error) {
+                }
+                catch (error) {
                     console.error(error);
                     recruitChannel.send(`${dict.recruit.error}`);
                 }
@@ -36,12 +39,12 @@ module.exports = {
  */
 function sendRecruitMessage(channel, rowData) {
 
-    const url = rowData[recruit.credentials].match(/\bhttps?:\/\/\S+/gi);
+    const recruitUrl = rowData[recruit.credentials].match(/\bhttps?:\/\/\S+/gi);
     const embedMessage = new Discord.MessageEmbed()
-        .setColor(recruit.color)
-        .setTitle(recruit.title)
-        .setAuthor(rowData[recruit.name], recruit.logo.small, url ? url[0] : recruit.url)
-        .setThumbnail(recruit.logo.large, recruit.url)
+        .setColor(color)
+        .setTitle(dict.recruit.embed.title)
+        .setAuthor(rowData[recruit.name], logo.small, recruitUrl ? recruitUrl[0] : url)
+        .setThumbnail(logo.large, recruit.url)
         .addFields(
             { name: recruit.introcution, value: `>>> ${rowData[recruit.introcution]}` },
             { name: recruit.credentials, value: `>>> ${rowData[recruit.credentials]}` },
@@ -49,7 +52,7 @@ function sendRecruitMessage(channel, rowData) {
             { name: recruit.contact, value: `>>> ${rowData[recruit.contact]}` },
             { name: recruit.testosterone, value: `>>> ${rowData[recruit.testosterone]}` },
         )
-        .setFooter(`${recruit.footer} ${rowData[recruit.date]}`, recruit.logo.small);
+        .setFooter(`${dict.recruit.embed.footer} ${rowData[recruit.date]}`, logo.small);
 
     channel.send(embedMessage)
         .then(() => channel.lastMessage.react('👍'))

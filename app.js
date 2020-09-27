@@ -27,7 +27,7 @@ for (const file of storageFiles) {
 // this event will only trigger one time after logging in
 client.once('ready', () => {
     // connected
-    console.log(client.storage.get('dictionary').system.ready);
+    console.log(`${client.storage.get('dictionary').system.ready}`);
 });
 
 // set status when bot is ready
@@ -49,6 +49,7 @@ client.on('message', message => {
     // development channel log
     if (message.guild && message.channel == functions.getChannelByName(message.guild, client.storage.get('channel').bot.name) && !message.author.bot) {
         console.log(message);
+        console.log(client);
     }
 
     // dm log

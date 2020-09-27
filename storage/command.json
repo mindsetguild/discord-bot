@@ -1,24 +1,25 @@
 {
     "help": {
-        "keyword": "help",
-        "path": {
-            "cs": "./resources/help",
-            "en": "./resources/help"
-        }
+        "keyword": "help"
     },
     "delete": {
-        "keyword": "delete"
+        "keyword": "delete",
+        "args": "<number>"
     },
     "private": {
         "keyword": "request"
     },
     "role": {
-        "keyword": "role"
+        "keyword": "role",
+        "args": "<name>"
     },
     "cat": {
         "keyword": "cat",
         "emojis": ["mericCat", "CatWhat", "catJAM", "ThumbUpCat"],
         "url": "https://aws.random.cat/meow"
+    },
+    "idea": {
+        "keyword": "idea"
     },
     "dog": {
         "keyword": "dogo",
