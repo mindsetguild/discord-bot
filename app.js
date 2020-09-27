@@ -27,7 +27,7 @@ for (const file of storageFiles) {
 // this event will only trigger one time after logging in
 client.once('ready', () => {
     // connected
-    console.log(`${client.storage.get('dictionary').system.ready}`);
+    console.log(`${client.user.tag} ${client.storage.get('dictionary').system.ready}`);
 });
 
 // set status when bot is ready

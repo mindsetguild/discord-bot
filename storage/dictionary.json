@@ -1,11 +1,11 @@
 {
     "system": {
-        "ready": "Discord bot connected to server!",
+        "ready": "connected to server!",
         "running": "is up and running!"
     },
     "error": {
-        "reaction": "One of the emojis failed to react!",
-        "missing": "Command not found! Check !help for more information!",
+        "reaction": "one of the emojis failed to react!",
+        "missing": "command not found! Check !help for more information!",
         "command": "there was an error trying to execute your command! 🤷‍♀️"
     },
     "help": {
