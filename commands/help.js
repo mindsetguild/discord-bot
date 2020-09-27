@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { prefix, color, logo } = require('../config.json');
+const { prefix, color, logo, languages } = require('../config.json');
 
 module.exports = {
 	name: 'help',
@@ -11,18 +11,22 @@ module.exports = {
 };
 
 function sendHelpMessage(message, storage) {
-	const title = storage.command.help.keyword.charAt(0).toUpperCase() + storage.command.help.keyword.slice(1);
 	const embedMessage = new Discord.MessageEmbed()
-		.setAuthor(title, logo.small)
+		.setAuthor(storage.dict.help.title, logo.small)
 		.setColor(color)
 		.addFields(
 			{
-				name: '\u200b',
-				value: `\`${prefix}${storage.command.help.keyword} ${storage.command.help.args || ''}\` - ${storage.dict.help.embed.command.help}
-				\`${prefix}${storage.command.delete.keyword} ${storage.command.help.args || ''}\` - ${storage.dict.help.embed.command.delete}
-				\`${prefix}${storage.command.role.keyword} ${storage.command.help.args || ''}\` - ${storage.dict.help.embed.command.role}
-				\`${prefix}${storage.command.cat.keyword} ${storage.command.help.args || ''}\` - ${storage.dict.help.embed.command.cat}
-				\`${prefix}${storage.command.idea.keyword} ${storage.command.help.args || ''}\` - ${storage.dict.help.embed.command.idea}`,
+				name: storage.dict.help.embed.general.title,
+				value: `\`${prefix}${storage.command.help.keyword} ${storage.command.help.args || ''}\` - ${storage.dict.help.embed.general.help}
+				\`${prefix}${storage.command.delete.keyword} ${storage.command.delete.args || ''}\` - ${storage.dict.help.embed.general.delete}
+				\`${prefix}${storage.command.role.keyword} ${storage.command.role.args || ''}\` - ${storage.dict.help.embed.general.role}
+				\`${prefix}${storage.command.cat.keyword} ${storage.command.cat.args || ''}\` - ${storage.dict.help.embed.general.cat}
+				\`${prefix}${storage.command.idea.keyword} ${storage.command.idea.args || ''}\` - ${storage.dict.help.embed.general.idea}
+				\`${prefix}${storage.command.set.keyword} ${storage.command.set.args || ''}\` - ${storage.dict.help.embed.general.set}`,
+			},
+			{
+				name: storage.dict.help.embed.set.title,
+				value: `\`${prefix}${storage.command.set.keyword} ${storage.command.set.attributes.language.keyword[0]} ${storage.command.set.attributes.language.args || ''}\` - ${storage.dict.help.embed.set.language} (${languages.join(', ')})`,
 			},
 		);
 

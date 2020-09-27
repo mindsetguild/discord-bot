@@ -19,10 +19,21 @@
         "url": "https://aws.random.cat/meow"
     },
     "idea": {
-        "keyword": "idea"
+        "keyword": "idea",
+        "args": "<text>"
     },
     "dog": {
         "keyword": "dogo",
         "emojis": ["WoweeW"]
+    },
+    "set": {
+        "keyword": "set",
+        "args": "<attribute> <value>",
+        "attributes": {
+            "language": {
+                "keyword": ["language", "lang"],
+                "args":"<value>"
+            }
+        }
     }
 }

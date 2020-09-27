@@ -9,14 +9,21 @@
         "command": "there was an error trying to execute your command! 🤷‍♀️"
     },
     "help": {
+        "title": "Help",
         "success": "here is your help!",
         "embed": {
-            "command": {
+            "general": {
+                "title": "General",
                 "help": "show help message",
                 "delete": "delete specified number of messages in current channel",
                 "role": "show all users for specified role name",
                 "cat": "send random cat image 🐈 in current channel",
-                "idea": "add new idea to google sheet"
+                "idea": "add new idea to google sheet",
+                "set": "specific attribute for user"
+            },
+            "set": {
+                "title": "Set",
+                "language": "set bot language for user"
             }
         }
     },
@@ -45,11 +52,19 @@
             "description": "New application has been submitted!",
             "footer": "Application submitted on"
         },
-        "error": "there was an error loading application!"
+        "error": "there was an error loading application! 🤷‍♀️"
     },
     "bot": {
         "response": {
             "mention": "nějaká práce?"
+        }
+    },
+    "set": {
+        "arguments": "your arguments are wrong or missing! Check !help for more information!",
+        "language": {
+            "success": "your language has been updated!",
+            "error": "you are already set to this language!",
+            "missing": "this language is not supported!"
         }
     }
 }

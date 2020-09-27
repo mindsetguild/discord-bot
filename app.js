@@ -1,5 +1,6 @@
 // require the discord.js module and other config files
 const Discord = require('discord.js');
+const Sequelize = require('sequelize');
 const { prefix, token, status, activity } = require('./config.json');
 const fs = require('fs');
 const functions = require('./functions/functions.js');
@@ -7,7 +8,7 @@ const functions = require('./functions/functions.js');
 // individual modules
 const recruit = require('./recruit/recruit.js');
 
-// create a new discord client and load command and storage files
+// create a new discord client and load command storage files and local database
 const client = new Discord.Client();
 
 client.commands = new Discord.Collection();
@@ -24,21 +25,28 @@ for (const file of storageFiles) {
     client.storage.set(file.split('.')[0], storage);
 }
 
+client.db = new Discord.Collection();
+client.db.set('user', dbUserModel(dbConnection()));
+
 // this event will only trigger one time after logging in
 client.once('ready', () => {
     // connected
-    console.log(`${client.user.tag} ${client.storage.get('dictionary').system.ready}`);
+    console.log(`${client.user.tag} ${client.storage.get('en').system.ready}`);
+    // synchronize user database model
+    client.db.get('user').sync();
 });
 
 // set status when bot is ready
 client.on('ready', () => {
+
+    // set bot status and activity
     client.user.setPresence({
         status: status,
         activity: activity,
-    }),
+    });
 
-        // bot is running
-        console.log(`${client.user.tag} ${client.storage.get('dictionary').system.running}`);
+    // bot is running
+    console.log(`${client.user.tag} ${client.storage.get('en').system.running}`);
 
     // start checking for new applications
     recruit.execute(client);
@@ -48,13 +56,12 @@ client.on('ready', () => {
 client.on('message', message => {
     // development channel log
     if (message.guild && message.channel == functions.getChannelByName(message.guild, client.storage.get('channel').bot.name) && !message.author.bot) {
-        console.log(message);
-        console.log(client);
+        // console.log(message);
     }
 
     // dm log
     if (message.channel.type == 'dm' && !message.author.bot) {
-        console.log(`${message.author.tag}: ${message.content}`);
+        console.log(`${message.author.username}: ${message.content}`);
     }
 
     // pepelaugh react
@@ -64,9 +71,9 @@ client.on('message', message => {
 
     // bot is mentioned
     if (message.guild && message.content.includes(client.user.id)) {
-        message.reply(`${client.storage.dictionary.bot.response.mention} ${functions.getEmojiByName(message.guild, 'BOGGED')}`)
+        message.reply(`${client.storage.get('en').bot.response.mention} ${functions.getEmojiByName(message.guild, 'BOGGED')}`)
             .then(() => message.react(functions.getEmojiByName(message.guild, 'PepegaCall').id))
-            .catch(error => { console.error(error); message.reply(`${client.storage.get('dictionary').error.reaction}`); });
+            .catch(error => { console.error(error); message.reply(`${client.storage.get('en').error.reaction}`); });
     }
 
     // prefix command was sent
@@ -75,27 +82,66 @@ client.on('message', message => {
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
 
-        if (!client.commands.has(commandName)) return;
+        findUserById(message.author.id, client.db.get('user')).then(response => {
+            // storage object for commands
+            const storage = {
+                command: client.storage.get('command'),
+                dict: response ? client.storage.get(response.get('language')) : client.storage.get('en'),
+                user: client.storage.get('user'),
+                emoji: client.storage.get('emoji'),
+                channel: client.storage.get('channel'),
+                db: {
+                    user: client.db.get('user'),
+                },
+            };
 
-        // storage object for commands
-        const storage = {
-            command: client.storage.get('command'),
-            dict: client.storage.get('dictionary'),
-            user: client.storage.get('user'),
-            emoji: client.storage.get('emoji'),
-            channel: client.storage.get('channel'),
-        };
-
-        // try to execute command
-        try {
-            client.commands.get(commandName).execute(message, args, storage);
-        }
-        catch (error) {
-            console.error(error);
-            message.reply(`${client.storage.get('dictionary').error.command}`);
-        }
+            // command not found
+            if (!client.commands.has(commandName)) {
+                message.reply(`${storage.dict.error.missing}`);
+                return;
+            }
+            // try to execute command
+            try {
+                client.commands.get(commandName).execute(message, args, storage);
+            }
+            catch (error) {
+                console.error(error);
+                message.reply(`${storage.dict.error.command}`);
+            }
+        });
     }
 });
 
 // login to Discord with your app's token
 client.login(token);
+
+function dbConnection() {
+    return new Sequelize('database', 'user', 'password', {
+        host: 'localhost',
+        dialect: 'sqlite',
+        logging: false,
+        // SQLite only
+        storage: 'database.sqlite',
+    });
+}
+
+function dbUserModel(sequelize) {
+    return sequelize.define('tags', {
+        id: {
+            type: Sequelize.TEXT,
+            unique: true,
+            primaryKey: true,
+        },
+        tag: {
+            type: Sequelize.STRING,
+            unique: true,
+        },
+        language: Sequelize.STRING,
+    });
+}
+
+async function findUserById(id, table) {
+    // equivalent to: SELECT * FROM tags WHERE name = 'tagName' LIMIT 1;
+    const tag = await table.findOne({ where: { id: id } });
+    return tag;
+}

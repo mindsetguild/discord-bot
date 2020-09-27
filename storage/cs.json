@@ -1,0 +1,70 @@
+{
+    "system": {
+        "ready": "připojen k serveru    !",
+        "running": "je připraven a běží!"
+    },
+    "error": {
+        "reaction": "jedna z emodži selhala při reakci na zprávu!",
+        "missing": "příkaz nebyl nalezel! Použij !help pro více informací!",
+        "command": "nastala chyba při pokusu o spuštění příkazu! 🤷‍♀️"
+    },
+    "help": {
+        "title": "Nápověda",
+        "success": "tady je tvá nápověda!",
+        "embed": {
+            "general": {
+                "title": "Obecné",
+                "help": "ukázat zprávu s nápovědou",
+                "delete": "smazání určitý počet zpráv v aktuálním kanálu",
+                "role": "zobrazit všechny členy pro specifikovanou roli",
+                "cat": "poslání náhodného obrázku 🐈 do aktuálního kanálu",
+                "idea": "přidání nového nápadu do dokumentu",
+                "set": "nastavení specifického atributu"
+            },
+            "set": {
+                "title": "Nastavit",
+                "language": "nastavit jazyk bota pro určitého uživatele"
+            }
+        }
+    },
+    "delete": {
+        "arguments": "tvému příkazu chybí argument pro počet zpráv ke smazání!",
+        "nan": "hodnota počtu zpráv pro smazání není číslo!",
+        "permission": "nemáš práva k provedení této akce!",
+        "success": "zprávy smazány!",
+        "error": "nastala chyba při mazání zpráv!"
+    },
+    "role": {
+        "arguments": "tvému příkazu chybí argument nebo nemáš práva k této akci!",
+        "missing": "tato role na serveru neexistuje!"
+    },
+    "cat": {
+        "error": "nastala chyba při zasílání obrázku! 🐈"
+    },
+    "idea": {
+        "success": "tvůj nápad byl přidán do dokumentu!",
+        "error": "nastala chyba při přidávání nápadu do dokumentu! 🤷‍♀️",
+        "channel": "pri přidávání nápadů použij kanál"
+    },
+    "recruit": {
+        "embed": {
+            "title": "Přihláška", 
+            "description": "Nová přihláška byla zaslána!",
+            "footer": "Přihláška zaslána"
+        },
+        "error": "nastala chyba při zobrazení přihlášky! 🤷‍♀️"
+    },
+    "bot": {
+        "response": {
+            "mention": "nějaká práce?"
+        }
+    },
+    "set": {
+        "arguments": "špatné nebo chybějící argumenty! Napiš !help pro více informací!",
+        "language": {
+            "success": "tvůj jazyk byl změněn!",
+            "error": "tento jazyk je již nastaven!",
+            "missing": "tento jazyk není podporován!"
+        }
+    }
+}

@@ -7,11 +7,11 @@ module.exports = {
     mention: function(id, type = 'author') {
         switch (type) {
             case 'author':
-                return `<@${id}>`
+                return `<@${id}>`;
             case 'channel':
-                return `<#${id}>`
+                return `<#${id}>`;
             case 'role':
-                return `<@&${id}>`
+                return `<@&${id}>`;
             default:
                 return false;
         }
