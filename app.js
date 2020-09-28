@@ -2,15 +2,19 @@
 const Discord = require('discord.js');
 const { prefix, token, status, activity } = require('./config.json');
 const fs = require('fs');
+
+// additional functions
 const functions = require('./functions/general.js');
 const db = require('./functions/database.js');
 
 // individual modules
-const recruit = require('./recruit/recruit.js');
+const countdown = require('./modules/countdown/countdown.js');
+const recruit = require('./modules/recruit/recruit.js');
 
-// create a new discord client and load command storage files and local database
+// create a new discord client
 const client = new Discord.Client();
 
+// load all command files
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -18,6 +22,7 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
+// load all storage files
 client.storage = new Discord.Collection();
 const storageFiles = fs.readdirSync('./storage').filter(file => file.endsWith('.json'));
 for (const file of storageFiles) {
@@ -25,6 +30,7 @@ for (const file of storageFiles) {
     client.storage.set(file.split('.')[0], storage);
 }
 
+// database connection
 client.db = new Discord.Collection();
 client.db.set('user', db.model.user(db.connection()));
 
@@ -36,18 +42,12 @@ client.once('ready', () => {
     client.db.get('user').sync();
 });
 
-// set status when bot is ready
+// run modules when bot is ready
 client.on('ready', () => {
-
-    // set bot status and activity
-    client.user.setPresence({
-        status: status,
-        activity: activity,
-    });
-
     // bot is running
     console.log(`${client.user.tag} ${client.storage.get('en').system.running}`);
-
+    // set status to countdown
+    countdown.execute(client);
     // start checking for new applications
     recruit.execute(client);
 });
@@ -56,9 +56,12 @@ client.on('ready', () => {
 client.on('message', message => {
     // check if user is in db and set language if user is found
     db.user.getUserById(message.author.id, client.db.get('user')).then(response => {
+        // set language based on user preference
+        const dict = response ? client.storage.get(response.get('language')) : client.storage.get('en');
+
         // development channel log
-        if (message.guild && message.channel == functions.getChannelByName(message.guild, client.storage.get('channel').bot.name) && !message.author.bot) {
-            // console.log(message);
+        if (message.guild && message.channel == functions.getChannelByName(message.guild, 'bot-development') && !message.author.bot) {
+            console.log(message);
         }
 
         // dm log
@@ -73,9 +76,9 @@ client.on('message', message => {
 
         // bot is mentioned
         if (message.guild && message.content.includes(client.user.id)) {
-            message.reply(`${client.storage.get('en').bot.response.mention} ${functions.getEmojiByName(message.guild, 'BOGGED')}`)
+            message.reply(`${dict.bot.response.mention} ${functions.getEmojiByName(message.guild, 'BOGGED')}`)
                 .then(() => message.react(functions.getEmojiByName(message.guild, 'PepegaCall').id))
-                .catch(error => { console.error(error); message.reply(`${client.storage.get('en').error.reaction}`); });
+                .catch(error => { console.error(error); message.reply(`${dict.error.reaction}`); });
         }
 
         // prefix command was sent
@@ -84,11 +87,10 @@ client.on('message', message => {
             const args = message.content.slice(prefix.length).trim().split(/ +/);
             const commandName = args.shift().toLowerCase();
 
-
-            // storage object for commands
+            // storage object for messages
             const storage = {
                 command: client.storage.get('command'),
-                dict: response ? client.storage.get(response.get('language')) : client.storage.get('en'),
+                dict: dict,
                 user: client.storage.get('user'),
                 emoji: client.storage.get('emoji'),
                 channel: client.storage.get('channel'),

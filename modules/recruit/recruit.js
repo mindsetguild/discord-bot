@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const recruit = require('./config.json');
-const { server, google, url, color, logo } = require('../config.json');
-const dict = require('../storage/en.json');
+const { server, google, url, color, logo } = require('../../config.json');
+const dict = require('../../storage/en.json');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const interval = 10000;
 
@@ -68,7 +68,7 @@ async function run() {
     // spreadsheet url id
     const doc = new GoogleSpreadsheet(google.sheets.id);
     // load google credentials from config file
-    await doc.useServiceAccountAuth(require('../credentials/google.json'));
+    await doc.useServiceAccountAuth(require('../../credentials/google.json'));
     // loads document properties and worksheets
     await doc.loadInfo();
     // get idea sheet
