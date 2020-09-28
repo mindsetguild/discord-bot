@@ -3,7 +3,6 @@ const recruit = require('./config.json');
 const { server, google, url, color, logo } = require('../../config.json');
 const dict = require('../../storage/en.json');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const interval = 10000;
 
 module.exports = {
     name: 'recruit',
@@ -29,7 +28,7 @@ module.exports = {
                     recruitChannel.send(`${dict.recruit.error}`);
                 }
             });
-        }, interval);
+        }, recruit.interval);
     },
 };
 
