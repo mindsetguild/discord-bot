@@ -20,10 +20,10 @@ module.exports = {
          * @param {String} id
          * @param {Sequelize} table
          */
-        findUserById: async function (id, table) {
+        getUserById: async function (id, table) {
             // equivalent to SELECT * FROM table WHERE id = 'id' LIMIT 1;
-            const tag = await table.findOne({ where: { id: id } });
-            return tag;
+            const user = await table.findOne({ where: { id: id } });
+            return user;
         },
 
         /**
@@ -31,10 +31,10 @@ module.exports = {
          * @param {String} language
          * @param {Sequelize} table
          */
-        findUsersByLanguage: async function (language, table) {
-            const result = await table.findAll({ attributes: ['language'] });
-            const tagString = result.map(t => t.name).join(', ') || 'No tags set.';
-            console.log(`List of tags: ${tagString}`);
+        getAllUsers: async function (table) {
+            const result = await table.findAll({ attributes: ['*'] });
+            const users = result.map(user => user.id).join(', ') || 'No users added.';
+            console.log(`List of users: ${users}`);
         },
 
         /**
@@ -46,14 +46,13 @@ module.exports = {
         addUser: async function (author, language, table) {
             try {
                 // equivalent to INSERT INTO table (id, tag, language) VALUES (author.id, author.tag, language);
-                const tag = await table.create({
+                const user = await table.create({
                     id: author.id,
                     tag: author.tag,
                     language: language,
                 });
                 console.log(`User ${author.tag} with ID ${author.id} added.`);
             }
-
             catch (error) {
                 if (error.name == 'SequelizeUniqueConstraintError') {
                     console.log('That user already exists.');

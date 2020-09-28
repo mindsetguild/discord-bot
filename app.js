@@ -55,7 +55,7 @@ client.on('ready', () => {
 // message is sent
 client.on('message', message => {
     // check if user is in db and set language if user is found
-    db.user.findUserById(message.author.id, client.db.get('user')).then(response => {
+    db.user.getUserById(message.author.id, client.db.get('user')).then(response => {
         // development channel log
         if (message.guild && message.channel == functions.getChannelByName(message.guild, client.storage.get('channel').bot.name) && !message.author.bot) {
             // console.log(message);

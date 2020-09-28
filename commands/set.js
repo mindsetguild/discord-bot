@@ -12,7 +12,7 @@ module.exports = {
         }
 
         if (storage.command.set.attributes.language.keyword.includes(args[0]) && languages.includes(args[1])) {
-            user.findUserById(message.author.id, storage.db.user).then(response => {
+            user.getUserById(message.author.id, storage.db.user).then(response => {
                 if (!response) {
                     user.addUser(message.author, args[1], storage.db.user);
                     message.reply(`${storage.dict.set.language.success}`);
