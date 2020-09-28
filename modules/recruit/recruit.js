@@ -16,7 +16,7 @@ module.exports = {
 
                 if (response.rowCount <= rowCount) return;
 
-                const recruitChannel = client.guilds.cache.find(guild => guild.id == server).channels.cache.find(channel => channel.name == client.storage.get('channel').recruit.name);
+                const recruitChannel = client.guilds.cache.find(guild => guild.id == server).channels.cache.find(channel => channel.name == 'recruit-manager');
 
                 try {
                     rowCount = response.rowCount;
@@ -54,10 +54,12 @@ function sendRecruitMessage(channel, rowData) {
         )
         .setFooter(`${dict.recruit.embed.footer} ${rowData[recruit.date]}`, logo.small);
 
-    channel.send(embedMessage)
-        .then(() => channel.lastMessage.react('👍'))
-        .then(() => channel.lastMessage.react('👎'))
-        .catch(error => { console.error(error); channel.send(`${dict.error.reaction}`); });
+    channel.send(embedMessage).then(() => {
+        const recruitMessage = channel.lastMessage;
+        recruitMessage.react('👍')
+            .then(() => channel.lastMessage.react('👍'))
+            .catch(error => { console.error(error); channel.send(`${dict.error.reaction}`); });
+    });
 }
 
 /**

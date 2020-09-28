@@ -91,9 +91,6 @@ client.on('message', message => {
             const storage = {
                 command: client.storage.get('command'),
                 dict: dict,
-                user: client.storage.get('user'),
-                emoji: client.storage.get('emoji'),
-                channel: client.storage.get('channel'),
                 db: {
                     user: client.db.get('user'),
                 },
