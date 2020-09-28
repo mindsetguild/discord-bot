@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const functions = require('../functions/functions.js');
+const functions = require('../functions/general.js');
 
 module.exports = {
 	name: 'cat',

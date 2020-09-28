@@ -1,4 +1,4 @@
-const functions = require('../functions/functions.js');
+const functions = require('../functions/general.js');
 const { google } = require('../config.json');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
