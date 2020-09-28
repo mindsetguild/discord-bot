@@ -116,5 +116,5 @@ client.on('message', message => {
     });
 });
 
-// login to Discord with your app's token
+// login to Discord with your token
 client.login(token);
