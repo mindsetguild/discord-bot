@@ -8,7 +8,7 @@ module.exports = {
     description: 'add new idea to sheet',
     execute(message, args, storage) {
 
-        const channel = functions.getChannelByName(message.guild, storage.channel.idea.name);
+        const channel = functions.getChannelByName(message.guild, 'idea-manager');
 
         if (message.channel != channel) {
             message.reply(`${storage.dict.idea.channel} ${channel}`);
