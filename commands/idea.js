@@ -2,7 +2,6 @@ const functions = require('../functions/general.js');
 const { google } = require('../config.json');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
-
 module.exports = {
     name: 'idea',
     description: 'add new idea to sheet',

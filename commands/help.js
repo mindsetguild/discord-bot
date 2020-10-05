@@ -10,6 +10,11 @@ module.exports = {
 	},
 };
 
+/**
+ * Send embed message with help information
+ * @param {Discord.Message} message
+ * @param {Object} storage
+ */
 function sendHelpMessage(message, storage) {
 	const embedMessage = new Discord.MessageEmbed()
 		.setAuthor(storage.dict.help.title, logo.small)

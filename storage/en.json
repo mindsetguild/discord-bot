@@ -54,6 +54,13 @@
         },
         "error": "there was an error loading application! 🤷‍♀️"
     },
+    "tasklist": {
+        "embed": {
+            "title": "Task", 
+            "description": "New task has been added!"
+        },
+        "error": "there was an error loading task! 🤷‍♀️"
+    },
     "bot": {
         "response": {
             "mention": "nějaká práce?"

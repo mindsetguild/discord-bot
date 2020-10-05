@@ -16,7 +16,7 @@ module.exports = {
 
                 if (response.rowCount <= rowCount) return;
 
-                const recruitChannel = client.guilds.cache.find(guild => guild.id == server).channels.cache.find(channel => channel.name == 'recruit-manager');
+                const recruitChannel = client.guilds.cache.find(guild => guild.id == server).channels.cache.find(channel => channel.name == recruit.channel.name);
 
                 try {
                     rowCount = response.rowCount;
@@ -33,7 +33,7 @@ module.exports = {
 };
 
 /**
- *
+ * Send embed message with new application
  * @param {Discord.Channel} channel
  * @param {Object} rowData
  */
@@ -57,7 +57,7 @@ function sendRecruitMessage(channel, rowData) {
     channel.send(embedMessage).then(() => {
         const recruitMessage = channel.lastMessage;
         recruitMessage.react('👍')
-            .then(() => channel.lastMessage.react('👍'))
+            .then(() => channel.lastMessage.react('👎'))
             .catch(error => { console.error(error); channel.send(`${dict.error.reaction}`); });
     });
 }

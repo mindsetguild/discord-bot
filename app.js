@@ -10,6 +10,7 @@ const db = require('./functions/database.js');
 // individual modules
 const countdown = require('./modules/countdown/countdown.js');
 const recruit = require('./modules/recruit/recruit.js');
+const tasklist = require('./modules/tasklist/tasklist.js');
 
 // create a new discord client
 const client = new Discord.Client();
@@ -48,8 +49,10 @@ client.on('ready', () => {
     console.log(`${client.user.tag} ${client.storage.get('en').system.running}`);
     // set status to countdown
     countdown.execute(client);
-    // start checking for new applications
+    // start recruit manager
     recruit.execute(client);
+    // start task manager
+    tasklist.execute(client);
 });
 
 // message is sent

@@ -54,6 +54,13 @@
         },
         "error": "nastala chyba při zobrazení přihlášky! 🤷‍♀️"
     },
+    "tasklist": {
+        "embed": {
+            "title": "Úkol", 
+            "description": "Byl přidán nový úkol!"
+        },
+        "error": "nastala chyba při zobrazení úkolu! 🤷‍♀️"
+    },
     "bot": {
         "response": {
             "mention": "nějaká práce?"
