@@ -7,7 +7,6 @@ module.exports = {
     description: 'send videos from storage if message contains keywords for video file names',
     execute(client) {
         client.on('message', message => {
-            // 
             if (message.guild && !message.author.bot && !message.content.includes('/attachments/')) {
                 // normalized message text
                 const text = message.content.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -29,8 +28,8 @@ module.exports = {
                             // send video file
                             message.channel.send({
                                 files: [
-                                    `${videosPath}/${videoFiles[Math.floor(Math.random() * videoFiles.length)]}`
-                                ]
+                                    `${videosPath}/${videoFiles[Math.floor(Math.random() * videoFiles.length)]}`,
+                                ],
                             });
                             // keyword is found and video has been sent
                             keywordFound = true;

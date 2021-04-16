@@ -51,7 +51,7 @@ client.on('ready', () => {
     // set status to countdown
     // countdown.execute(client);
     // start keywords module
-    keywords.execute(client, fs, functions);
+    keywords.execute(client);
     // start recruit manager
     recruit.execute(client);
     // start task manager
@@ -67,7 +67,7 @@ client.on('message', message => {
 
         // development channel log
         if (message.guild && message.channel == functions.getChannelByName(message.guild, 'bot-development') && !message.author.bot) {
-            //console.log(`${message.author.username}: ${message.content}`);
+            // console.log(`${message.author.username}: ${message.content}`);
         }
 
         // dm log
