@@ -48,7 +48,7 @@ client.on('ready', () => {
     // bot is running
     console.log(`${client.user.tag} ${client.storage.get('en').system.running}`);
     // set status to countdown
-    countdown.execute(client);
+    // countdown.execute(client);
     // start recruit manager
     recruit.execute(client);
     // start task manager
@@ -64,7 +64,7 @@ client.on('message', message => {
 
         // development channel log
         if (message.guild && message.channel == functions.getChannelByName(message.guild, 'bot-development') && !message.author.bot) {
-            console.log(message);
+            //console.log(`${message.author.username}: ${message.content}`);
         }
 
         // dm log
@@ -77,6 +77,46 @@ client.on('message', message => {
             message.react(functions.getEmojiByName(message.guild, 'PepeLaugh').id);
         }
 
+        // coolman react
+        if (message.guild && message.content.includes(functions.getEmojiByName(message.guild, 'coolman')) && !message.author.bot) {
+            message.react(functions.getEmojiByName(message.guild, 'coolman').id);
+        }
+
+        // coolman videos
+        if (message.guild && !message.content.includes('.gif') && !message.author.bot) {
+
+            // normalized message text and keywords for videos
+            const text = message.content.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            const keyWords = ['sakra', 'negr', 'ocist', 'lednic', 'satan', 'zabij', 'prdel'];
+            // keyword is found
+            let keyWordFound = false;
+
+            // loop through all keywords
+            keyWords.forEach(keyWord => {
+                // message contains keyword
+                if (text.includes(keyWord) && !keyWordFound) {
+                    // file count and file name
+                    const videoFiles = fs.readdirSync('./storage/videos').filter(file => file.includes(keyWord));
+                    // react and send video
+                    try {
+                        // coolman emoji react
+                        message.react(functions.getEmojiByName(message.guild, 'coolman').id);
+                        // send video file
+                        message.channel.send({
+                            files: [
+                                `./storage/videos/${videoFiles[Math.floor(Math.random() * videoFiles.length)]}`
+                            ]
+                        });
+                        // keyword is found and video has been sent
+                        keyWordFound = true;
+                    }
+                    catch (error) {
+                        console.log(error);
+                    }
+                }
+            });
+        }
+
         // bot is mentioned
         if (message.guild && message.content.includes(client.user.id)) {
             message.reply(`${dict.bot.response.mention} ${functions.getEmojiByName(message.guild, 'BOGGED')}`)
@@ -85,7 +125,7 @@ client.on('message', message => {
         }
 
         // prefix command was sent
-        if (message.content.startsWith(prefix) && !message.author.bot) {
+        if (message.content.length > 1 && message.content.startsWith(prefix) && !message.author.bot) {
 
             const args = message.content.slice(prefix.length).trim().split(/ +/);
             const commandName = args.shift().toLowerCase();
