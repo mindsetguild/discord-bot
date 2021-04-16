@@ -11,6 +11,7 @@ const db = require('./functions/database.js');
 const countdown = require('./modules/countdown/countdown.js');
 const recruit = require('./modules/recruit/recruit.js');
 const tasklist = require('./modules/tasklist/tasklist.js');
+const keywords = require('./modules/keywords/keywords');
 
 // create a new discord client
 const client = new Discord.Client();
@@ -49,6 +50,8 @@ client.on('ready', () => {
     console.log(`${client.user.tag} ${client.storage.get('en').system.running}`);
     // set status to countdown
     // countdown.execute(client);
+    // start keywords module
+    keywords.execute(client, fs, functions);
     // start recruit manager
     recruit.execute(client);
     // start task manager
@@ -80,41 +83,6 @@ client.on('message', message => {
         // coolman react
         if (message.guild && message.content.includes(functions.getEmojiByName(message.guild, 'coolman')) && !message.author.bot) {
             message.react(functions.getEmojiByName(message.guild, 'coolman').id);
-        }
-
-        // coolman videos
-        if (message.guild && !message.content.includes('.gif') && !message.author.bot) {
-
-            // normalized message text and keywords for videos
-            const text = message.content.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-            const keyWords = ['sakra', 'negr', 'ocist', 'lednic', 'satan', 'zabij', 'prdel'];
-            // keyword is found
-            let keyWordFound = false;
-
-            // loop through all keywords
-            keyWords.forEach(keyWord => {
-                // message contains keyword
-                if (text.includes(keyWord) && !keyWordFound) {
-                    // file count and file name
-                    const videoFiles = fs.readdirSync('./storage/videos').filter(file => file.includes(keyWord));
-                    // react and send video
-                    try {
-                        // coolman emoji react
-                        message.react(functions.getEmojiByName(message.guild, 'coolman').id);
-                        // send video file
-                        message.channel.send({
-                            files: [
-                                `./storage/videos/${videoFiles[Math.floor(Math.random() * videoFiles.length)]}`
-                            ]
-                        });
-                        // keyword is found and video has been sent
-                        keyWordFound = true;
-                    }
-                    catch (error) {
-                        console.log(error);
-                    }
-                }
-            });
         }
 
         // bot is mentioned

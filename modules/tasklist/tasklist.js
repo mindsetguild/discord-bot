@@ -61,34 +61,39 @@ function sendTasklistMessage(channel, rowData) {
  * Run google sheet api function
  */
 async function run() {
-    // spreadsheet url id
-    const doc = new GoogleSpreadsheet(google.sheets.id);
-    // load google credentials from config file
-    await doc.useServiceAccountAuth(require('../../credentials/google.json'));
-    // loads document properties and worksheets
-    await doc.loadInfo();
-    // get idea sheet
-    const sheet = doc.sheetsByTitle['Tasklist'];
-    // get current rows
-    const rows = await sheet.getRows();
+    try {
+        // spreadsheet url id
+        const doc = new GoogleSpreadsheet(google.sheets.id);
+        // load google credentials from config file
+        await doc.useServiceAccountAuth(require('../../credentials/google.json'));
+        // loads document properties and worksheets
+        await doc.loadInfo();
+        // get idea sheet
+        const sheet = doc.sheetsByTitle['Tasklist'];
+        // get current rows
+        const rows = await sheet.getRows();
 
-    // let rowCount = 0;
-    // rows.forEach(row => row._rawData[0] && row._rawData[1] && row._rawData[3] ? rowCount++ : false);
+        // let rowCount = 0;
+        // rows.forEach(row => row._rawData[0] && row._rawData[1] && row._rawData[3] ? rowCount++ : false);
 
-    // build response object
-    const rowData = {};
-    let rowCount = 0;
-    let lastRow;
+        // build response object
+        const rowData = {};
+        let rowCount = 0;
+        let lastRow;
 
-    rows.forEach(row => {
-        if (row.Status && row.Status != 'Error') rowCount++;
-        if (row.Status == 'Pending') lastRow = row;
-    });
+        rows.forEach(row => {
+            if (row.Status && row.Status != 'Error') rowCount++;
+            if (row.Status == 'Pending') lastRow = row;
+        });
 
-    lastRow._sheet.headerValues.forEach((header, index) => rowData[header] = lastRow._rawData[index]);
+        lastRow._sheet.headerValues.forEach((header, index) => rowData[header] = lastRow._rawData[index]);
 
-    return {
-        rowCount: rowCount,
-        rowData: rowData,
-    };
+        return {
+            rowCount: rowCount,
+            rowData: rowData,
+        };
+    }
+    catch (error) {
+        console.error(error);
+    }
 }
