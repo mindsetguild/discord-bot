@@ -14,7 +14,7 @@ module.exports = {
         setInterval(() => {
             run().then(response => {
 
-                if (response.rowCount <= rowCount) return;
+                if (!response.rowCount || response.rowCount <= rowCount) return;
 
                 const recruitChannel = client.guilds.cache.find(guild => guild.id == server).channels.cache.find(channel => channel.name == recruit.channel.name);
 

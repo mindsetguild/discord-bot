@@ -1,6 +1,6 @@
 // require the discord.js module and other config files
 const Discord = require('discord.js');
-const { prefix, token, status, activity } = require('./config.json');
+const { prefix, token, modules, status, activity } = require('./config.json');
 const fs = require('fs');
 
 // additional functions
@@ -20,14 +20,29 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
+    // load command file
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
+}
+
+// load all module files
+client.modules = new Discord.Collection();
+const moduleFolders = fs.readdirSync('./modules');
+for (const folder of moduleFolders) {
+    // load module file
+    const moduleFile = fs.readdirSync(`./modules/${folder}`).filter(file => file == `${folder}.js`);
+    // skip if file is missing
+    if (!moduleFile) continue;
+    // load module file
+    const module = require(`./modules/${folder}/${moduleFile[0]}`);
+    client.modules.set(module.name, module);
 }
 
 // load all storage files
 client.storage = new Discord.Collection();
 const storageFiles = fs.readdirSync('./storage').filter(file => file.endsWith('.json'));
 for (const file of storageFiles) {
+    // load storage file
     const storage = require(`./storage/${file}`);
     client.storage.set(file.split('.')[0], storage);
 }
@@ -48,14 +63,11 @@ client.once('ready', () => {
 client.on('ready', () => {
     // bot is running
     console.log(`${client.user.tag} ${client.storage.get('en').system.running}`);
-    // set status to countdown
-    // countdown.execute(client);
-    // start keywords module
-    keywords.execute(client);
-    // start recruit manager
-    recruit.execute(client);
-    // start task manager
-    tasklist.execute(client);
+    // run modules
+    client.modules.filter(module => !modules.disabled.includes(module.name)).map(module => {
+        module.execute(client);
+        console.log(`Module '${module.name}' with description '${module.description}' has been loaded!`);
+    });
 });
 
 // message is sent
