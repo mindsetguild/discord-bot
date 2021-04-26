@@ -7,12 +7,6 @@ const fs = require('fs');
 const functions = require('./functions/general.js');
 const db = require('./functions/database.js');
 
-// individual modules
-const countdown = require('./modules/countdown/countdown.js');
-const recruit = require('./modules/recruit/recruit.js');
-const tasklist = require('./modules/tasklist/tasklist.js');
-const keywords = require('./modules/keywords/keywords');
-
 // create a new discord client
 const client = new Discord.Client();
 
@@ -30,11 +24,11 @@ client.modules = new Discord.Collection();
 const moduleFolders = fs.readdirSync('./modules');
 for (const folder of moduleFolders) {
     // load module file
-    const moduleFile = fs.readdirSync(`./modules/${folder}`).filter(file => file == `${folder}.js`);
+    const moduleFile = fs.readdirSync(`./modules/${folder}`).find(file => file === `${folder}.js`);
     // skip if file is missing
     if (!moduleFile) continue;
     // load module file
-    const module = require(`./modules/${folder}/${moduleFile[0]}`);
+    const module = require(`./modules/${folder}/${moduleFile}`);
     client.modules.set(module.name, module);
 }
 
@@ -65,8 +59,13 @@ client.on('ready', () => {
     console.log(`${client.user.tag} ${client.storage.get('en').system.running}`);
     // run modules
     client.modules.filter(module => !modules.disabled.includes(module.name)).map(module => {
-        module.execute(client);
-        console.log(`Module '${module.name}' with description '${module.description}' has been loaded!`);
+        try {
+            module.execute(client);
+            console.log(`Module '${module.name}' with description '${module.description}' has been loaded!`);
+        }
+        catch (error) {
+            console.error(error);
+        }
     });
 });
 
