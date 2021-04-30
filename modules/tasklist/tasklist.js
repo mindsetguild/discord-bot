@@ -14,7 +14,7 @@ module.exports = {
         setInterval(() => {
             run().then(response => {
 
-                if (!response.rowCount || response.rowCount <= rowCount) return;
+                if (!response || response.rowCount <= rowCount) return;
 
                 const tasklistChannel = client.guilds.cache.find(guild => guild.id == server).channels.cache.find(channel => channel.name == tasklist.channel.name);
 
@@ -94,6 +94,6 @@ async function run() {
         };
     }
     catch (error) {
-        console.error(error);
+        console.error('Google API connection error!');
     }
 }
